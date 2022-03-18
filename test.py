@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-
+# On importe le module matplotlib qui permet de générer des graphiques 2D et 3D
+import matplotlib.pyplot as plt
 from fringe_detector import *
 import numpy as np
 #JSON pour lire paramètres

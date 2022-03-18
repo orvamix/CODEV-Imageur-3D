@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-# On importe le module matplotlib qui permet de générer des graphiques 2D et 3D
-import matplotlib.pyplot as plt
 #from skimage import io, transform
 from skimage import io
 # On importe le module numpy qui permet de faire du calcul numérique

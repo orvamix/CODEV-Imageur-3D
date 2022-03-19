@@ -10,7 +10,7 @@ from numpy import loadtxt, zeros, ones, savetxt, empty
 """
 return numpy matrix
 """
-def fringe_detector(N,uRzoom,vRzoom):
+def fringe_detector(img_name,N,uRzoom,vRzoom):
     #On créé la matrice IRzoom
     IRzoom = zeros((uRzoom,vRzoom,N))
     Posiglobal = zeros((uRzoom,vRzoom))
@@ -20,7 +20,7 @@ def fringe_detector(N,uRzoom,vRzoom):
     # chargement de l'image puis binarisation 
     for k in range (0,N):
         #------ Chargement des images d'intensité IRZoom de l'objet dans le repere recepteur ---  
-        Nom = 'img_cam/IRZoom' + str(k+1) + '.bmp'
+        Nom = 'img_cam/'+ img_name + str(k+1) + '.bmp'
         img = io.imread(Nom)
         # Seuillage de l'image
         threshold = 125
@@ -75,9 +75,9 @@ def fringe_detector(N,uRzoom,vRzoom):
                 PosiDroite[i,aD] = C+1
 
     #Enregistrement 
-    savetxt('results/PosiGauche.txt', PosiGauche, fmt='%-7.0f')
-    savetxt('results/PosiDroite.txt', PosiDroite, fmt='%-7.0f')
-    savetxt('results/Posiglobal.txt', Posiglobal, fmt='%-7.0f')
+    savetxt('results/PosiGauche'+img_name+'.txt', PosiGauche, fmt='%-7.0f')
+    savetxt('results/PosiDroite'+img_name+'.txt', PosiDroite, fmt='%-7.0f')
+    savetxt('results/Posiglobal'+img_name+'.txt', Posiglobal, fmt='%-7.0f')
 
     #Inversion de contraste pour l'affichage
     InvPosiglobal=1.-Posiglobal
@@ -86,7 +86,7 @@ def fringe_detector(N,uRzoom,vRzoom):
     couleur_cotes = np.asarray([255,255,255])  #Blanc intensitee maximale
     B = zeros((uRzoom,vRzoom,3))
 
-    A = 'Cotes_franges.bmp'
+    A = 'Cotes_franges'+img_name+'.bmp'
     B[:,:,0] = couleur_cotes[0]*InvPosiglobal
     B[:,:,1] = couleur_cotes[1]*InvPosiglobal
     B[:,:,2] = couleur_cotes[2]*InvPosiglobal

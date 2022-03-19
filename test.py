@@ -11,17 +11,11 @@ N=info['N']
 uRzoom=info['uRzoom']
 vRzoom=info['vRzoom']
 
-Mat = zeros((uRzoom,vRzoom), dtype=int)
 
-for i in range(2**5):
-    LC=fringe_detector(i,N,uRzoom,vRzoom)
-    Mat+=LC
-# affichage 
+B=fringe_detector(N,uRzoom,vRzoom)
+#Affichage de l'image enregistrée des positions globales des franges
 plt.figure()
-plt.imshow(Mat, cmap = plt.get_cmap('gray'))
-plt.title('Image frange')
-plt.xlabel('vR pixels')
-plt.ylabel('uR pixels')
-plt.show()
-
-np.savetxt("mat.txt", Mat.astype(int), fmt='%5.0f', delimiter=",")
+plt.imshow(B[:,:,1], cmap = plt.get_cmap('gray'))
+plt.title('Image des cotés des franges')
+plt.xlabel('vRzoom pixels')
+plt.ylabel('uRzomm pixels')

@@ -2,6 +2,7 @@
 # On importe le module matplotlib qui permet de générer des graphiques 2D et 3D
 import matplotlib.pyplot as plt
 from fringe_detector import *
+from coor3D_objet import *
 import numpy as np
 #JSON pour lire paramètres
 import json
@@ -12,10 +13,8 @@ uRzoom=info['uRzoom']
 vRzoom=info['vRzoom']
 
 
-B=fringe_detector(N,uRzoom,vRzoom)
-#Affichage de l'image enregistrée des positions globales des franges
-plt.figure()
-plt.imshow(B[:,:,1], cmap = plt.get_cmap('gray'))
-plt.title('Image des cotés des franges')
-plt.xlabel('vRzoom pixels')
-plt.ylabel('uRzomm pixels')
+# fringe_detector(N,uRzoom,vRzoom)
+coord_r=np.loadtxt('results/PosiGauche.txt')
+for i in range(2**N):
+    v_e=(vRzoom*i/(2**N))+1
+    coord3D()

@@ -1,14 +1,11 @@
 # -*- coding: utf-8 -*-
 # On importe le module matplotlib qui permet de générer des graphiques 2D et 3D
 
-from mpl_toolkits.mplot3d import Axes3D
-import matplotlib.pyplot as plt
-
-
 import matplotlib.pyplot as plt
 from fringe_detector import *
 from coord3D_objet import *
 import numpy as np
+import pickle
 #JSON pour lire paramètres
 import json
 f = open('info.json')
@@ -39,19 +36,6 @@ with open("mat.txt", 'w') as output:
     for row in Mat_fin:
         output.write(str(row) + '\n')
 
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
+with open("coord", "wb") as fp:   #Pickling
+    pickle.dump(Mat_fin, fp)
 
-x =[item[0] for item in Mat_fin]
-y =[item[1] for item in Mat_fin]
-z =[item[2] for item in Mat_fin]
-
-
-
-ax.scatter(x, y, z, c='r', marker='o',s=0.1)
-
-ax.set_xlabel('X Label')
-ax.set_ylabel('Y Label')
-ax.set_zlabel('Z Label')
-
-plt.show()

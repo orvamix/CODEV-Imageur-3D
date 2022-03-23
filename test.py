@@ -2,8 +2,8 @@
 # On importe le module matplotlib qui permet de générer des graphiques 2D et 3D
 
 import matplotlib.pyplot as plt
-from fringe_detector import *
-from coord3D_objet import *
+# from fringe_detector import *
+# from coord3D_objet import *
 import numpy as np
 import pickle
 #JSON pour lire paramètres
@@ -14,11 +14,23 @@ N=info['N']
 uRzoom=info['uRzoom']
 vRzoom=info['vRzoom']
 
+def coord3D(u,v, v_e):
+    ME=np.loadtxt('ME.txt')
+    MR=np.loadtxt('MR.txt')
+    
+    coord_px=np.array([u,v,v_e])
+    G=np.array([[MR[2][0]*coord_px[0], MR[2][1]*coord_px[0], ME[2][2]*coord_px[0]], [MR[2][0]*coord_px[1], MR[2][1]*coord_px[1], ME[2][2]*coord_px[1]], [MR[2][0]*coord_px[2], MR[2][1]*coord_px[2], ME[2][2]*coord_px[2]]])
+    G=np.subtract(G,np.array([[MR[0][0], MR[0][1], ME[0][2]], [MR[1][0], MR[1][1], ME[1][2]], [ME[1][0], ME[1][1], ME[1][2]]]))
+    coord_pxx=np.array([[MR[2][3]*coord_px[0]], [MR[2][3]*coord_px[1]], [ME[2][3]*coord_px[2]]])
+    H=np.subtract(np.array([MR[0][3],MR[1][3],ME[1][3]]),coord_pxx)
+    G_inv=np.linalg.inv(G)
+    return np.matmul(G_inv, H)
+
 
 Mat_temp=[]
 Mat_fin=[]
 
-# fringe_detector("IRZoom",N,uRzoom,vRzoom)
+#fringe_detector("IRZoom",N,uRzoom,vRzoom)
 
 PosD=np.loadtxt('results/PosiDroiteIRZoom.txt')
 

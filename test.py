@@ -36,7 +36,7 @@ Mat_fin=[]
 PosD=np.loadtxt('results/PosiglobalIRZoom.txt')
 
 
-for i in range(1, (2**N)+2):
+for i in range(1, (2**N)+1):
     if i//2 ==0 or i==0:
         v_e=(i)*vRzoom/(2**N)
         for j in range(len(PosD)):

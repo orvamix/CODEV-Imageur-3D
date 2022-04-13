@@ -36,9 +36,9 @@ Mat_fin=[]
 PosD=np.loadtxt('results/PosiglobalIRZoom.txt')
 
 
-for i in range(2, (2**N)+1):
-    if i//2 ==0:
-        v_e=(i+1)*vRzoom/(2**N)
+for i in range(1, (2**N)+2):
+    if i//2 ==0 or i==0:
+        v_e=(i)*vRzoom/(2**N)
         for j in range(len(PosD)):
             for k in range(len(PosD[j])):
                 if PosD[j][k]==i:
@@ -49,6 +49,8 @@ for i in range(2, (2**N)+1):
             for k in range(len(PosD[j])):
                 if PosD[j][k]==i:
                     Mat_temp.append([j+1,k+1,v_e])
+                    
+print(len(Mat_temp))
         
 
 for i in range(len(Mat_temp)):

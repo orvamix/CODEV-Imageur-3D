@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 from coord3D_objet import *
 from fringe_detector import *
-from calibration import *
+import calibration
 
 import json
 f = open('info.json')
@@ -24,21 +24,12 @@ cadre1 = tk.Frame(fenetre)
 cadre1.pack()
 cadre1.place(anchor="c", relx=.5, rely=.5)
 
-#Variable globales
-statut_calibrer=False
-statut_calculer=False
 
 def calibrer():
-    global statut_calibrer
-    statut_calibrer=True
-    calibration()
+    calibration.calibration()
     
 
 def calculer():
-    global statut_calibrer
-    if statut_calibrer==False:
-        messagebox.showinfo("Attention", "La calibration n'a pas été effectuée !")
-        return
     fringe_detector("IRZoom",N,1200,1300)
     coord3D_objet()
     messagebox.showinfo("Info", "Les calculs ont été effectués !")

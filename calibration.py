@@ -26,7 +26,7 @@ def cal_fenetre():
     
     
     def load():
-        filepath = askopenfilename(title="Ouvrir le fichier")
+        filepath = askopenfilename(title="Ouvrir le fichier",filetypes=[("Fichiers CODEV",".codev")])
         with open(filepath, "rb") as fp:   # Unpickling
             points= pickle.load(fp)
         for i in range(6):
@@ -40,7 +40,7 @@ def cal_fenetre():
         fenetre_cal.update()
     
     def save():
-        filepath=asksaveasfilename(initialfile="points_coord")
+        filepath=asksaveasfilename(title="Enregistrer le fichier",initialfile="points_coord",defaultextension="codev",filetypes=[("Fichiers CODEV",".codev")])
         for i in range(6):
             thisdict = {
               "emetteur": [sb_emet[i*2].get(),sb_emet[i*2+1].get()],
@@ -93,8 +93,10 @@ def cal_fenetre():
         
         fen_point_v[ligne].pack()
     
-    tk.Button(point_f, text="Sauver",command=save).pack()
-    tk.Button(point_f, text="Charger",command=load).pack()
+    boutons=tk.Frame(point_f)
+    tk.Button(boutons, text="Sauver",command=save).pack(side='right')
+    tk.Button(boutons, text="Charger",command=load).pack(side='right')
+    boutons.pack()
     info_f=tk.LabelFrame(f_glob, text="Informations")
     tk.Label(info_f, text="Longueur").pack()
     f_glob.add(info_f)

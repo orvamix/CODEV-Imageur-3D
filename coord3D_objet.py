@@ -3,6 +3,7 @@
 
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+from tkinter.filedialog import *
 # from fringe_detector import *
 # from coord3D_objet import *
 import numpy as np
@@ -67,7 +68,8 @@ def coord3D_objet():
     return True
 
 def affichage():
-    with open("coord", "rb") as fp:   # Unpickling
+    filepath = askopenfilename(title="Ouvrir le fichier",filetypes=[("Fichiers CODEV",".codev")])
+    with open(filepath, "rb") as fp:   # Unpickling
         Mat_fin= pickle.load(fp)
 
 

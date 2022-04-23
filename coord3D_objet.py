@@ -87,3 +87,6 @@ def affichage():
     ax.set_zlabel('Z Label')
 
     plt.show()
+
+if __name__ == "__main__":
+    coord3D_objet()

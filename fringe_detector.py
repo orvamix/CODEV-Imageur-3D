@@ -94,3 +94,6 @@ def fringe_detector(img_name,N,uRzoom,vRzoom):
     io.imsave(A,B)
     
     return B
+    
+if __name__ == "__main__":
+    fringe_detector("IRZoom",5,1200,1300)

@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter.filedialog import *
 import pickle
+import numpy as np
 
 #Définition du dictionnaire "points"
 #"point2":
@@ -9,6 +10,24 @@ import pickle
 #   "recepteur"[u,v]
 
 points={}
+
+def calcul_MR():
+    global points
+    c = np.array([[0]])
+    for i in range(6):
+        for j in range(2):
+            c=np.concatenate((c,np.array([[float(points["point"+str(i)]["recepteur"][j])]])))
+    c=c[1:]
+    print(c)
+
+
+def calcul_ME():
+    pass
+
+
+def calcul_calibration():
+    calcul_MR()
+    calcul_ME()
 
 def cal_fenetre():
     global points
@@ -28,6 +47,7 @@ def cal_fenetre():
     
     
     def load():
+        global points
         filepath = askopenfilename(title="Ouvrir le fichier",filetypes=[("Fichiers CODEV",".codev")])
         with open(filepath, "rb") as fp:   # Unpickling
             points= pickle.load(fp)
@@ -125,17 +145,14 @@ def cal_fenetre():
     menubar.add_cascade(label="Menu", menu=menu1)
 
     menu2 = tk.Menu(menubar, tearoff=0)
-    menu2.add_command(label="Calculer MR et ME")
+    menu2.add_command(label="Calculer MR et ME",command=calcul_calibration)
     menubar.add_cascade(label="Calculer", menu=menu2)
 
     fenetre_cal.config(menu=menubar)
     
+    
     #Mainloop
     fenetre_cal.mainloop()
-
-def calcul_calibration():
-    global points
-    pass
 
 def calibration(option=""):
     if(option!="calcul"):

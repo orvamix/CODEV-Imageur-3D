@@ -15,6 +15,8 @@ def cal_fenetre():
     fenetre_cal = tk.Toplevel()
     fenetre_cal.title("Calibration")
     
+
+    
     fen_point=[]
     fen_point_v=[]
     fen_point_f=[]
@@ -56,13 +58,17 @@ def cal_fenetre():
     
     
     
-    
+    #Divise en deux horizontalement -> un coté 6 points et un côté calcul+info
     f_glob=tk.PanedWindow(fenetre_cal, orient=tk.HORIZONTAL)
     f_glob.pack(side=tk.TOP, expand=tk.Y, fill=tk.BOTH, pady=2, padx=2)
+    f_info=tk.PanedWindow(fenetre_cal, orient=tk.VERTICAL)
+    f_info.pack(side=tk.TOP, expand=tk.Y, fill=tk.BOTH, pady=2, padx=2)
+    
+    #Les 6 points
     point_f=tk.Frame(f_glob, borderwidth=2)
     f_glob.add(point_f)
     for ligne in range(6):
-        fen_point.append(tk.LabelFrame(point_f, text="Point "+str(ligne+1)))
+        fen_point.append(tk.LabelFrame(point_f, text="Point n°"+str(ligne+1)))
         fen_point[ligne].pack(fill="both", expand="yes")
         fen_point_v.append(tk.PanedWindow(fen_point[ligne], orient=tk.HORIZONTAL))
         fen_point_v[ligne].pack(side=tk.TOP, expand=tk.Y, fill=tk.BOTH, pady=2, padx=2)
@@ -93,21 +99,49 @@ def cal_fenetre():
         
         fen_point_v[ligne].pack()
     
+    #Boutons sauvegarde et chargement
     boutons=tk.Frame(point_f)
     tk.Button(boutons, text="Sauver",command=save).pack(side='right')
     tk.Button(boutons, text="Charger",command=load).pack(side='right')
     boutons.pack()
-    info_f=tk.LabelFrame(f_glob, text="Informations")
-    tk.Label(info_f, text="Longueur").pack()
-    f_glob.add(info_f)
+    #Calculs
+    f_calc=tk.LabelFrame(f_info, text="Calculs")
+    tk.Button(f_calc, text="Calculer MR et ME",command=calcul_calibration).pack()
+    f_info.add(f_calc)
+    #Informations
+    f_cotation=tk.LabelFrame(f_info, text="Informations")
+    tk.Label(f_cotation, text="Longueur").pack()
+    f_info.add(f_cotation)
     
+    f_glob.add(f_info)
     
+    #Menubar
+    menubar = tk.Menu(fenetre_cal)
+
+    menu1 = tk.Menu(menubar, tearoff=0)
+    menu1.add_command(label="Charger", command=load)
+    menu1.add_command(label="Sauver", command=save)
+    menu1.add_command(label="Quitter", command=fenetre_cal.quit)
+    menubar.add_cascade(label="Menu", menu=menu1)
+
+    menu2 = tk.Menu(menubar, tearoff=0)
+    menu2.add_command(label="Calculer MR et ME")
+    menubar.add_cascade(label="Calculer", menu=menu2)
+
+    fenetre_cal.config(menu=menubar)
+    
+    #Mainloop
     fenetre_cal.mainloop()
 
+def calcul_calibration():
+    global points
+    pass
 
-def calibration():
-    cal_fenetre()
-    
+def calibration(option=""):
+    if(option!="calcul"):
+        cal_fenetre()
+    else:
+        calcul_calibration()
 
 
 

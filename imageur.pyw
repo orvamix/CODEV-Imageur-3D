@@ -30,11 +30,9 @@ statut_calculer=False
 
 def calibrer():
     global statut_calibrer
-    if calibration()==True:
-        statut_calibrer=True
-        messagebox.showinfo("Info", "Calibration effectuée avec succès")
-    else:
-        messagebox.showinfo("Erreur", "Problème de calibration")
+    statut_calibrer=True
+    calibration()
+    
 
 def calculer():
     global statut_calibrer

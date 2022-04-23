@@ -22,9 +22,10 @@ def cal_fenetre():
     print(fen_point)
     fenetre.mainloop()
 
+
 def calibration():
     cal_fenetre()
-    return True
+    
 
 
 

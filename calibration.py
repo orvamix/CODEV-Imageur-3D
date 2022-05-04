@@ -7,23 +7,27 @@ from numpy.linalg import inv
 #Définition du dictionnaire "points"
 #"point2":
 #   "emetteur":[u,v]
-#   "objet":[X,Y,Z]
+#   "objet_emetteur":[X,Y,Z]
 #   "recepteur"[u,v]
 
-points={}
+points_MR={}
+points_ME={}
+nbr_points_MR=18
+nbr_points_ME=24
 
 def calcul_MR():
-    global points
+    global points_MR
     B = np.array([[0 for i in range (11)]])
     c = np.array([[0]])
     x = np.array([])
     MR = np.array([])
-    for i in range (len(points)) :
-        X=float(points["point"+str(i)]["objet"][0])
-        Y=float(points["point"+str(i)]["objet"][1])
-        Z=float(points["point"+str(i)]["objet"][2])
-        U=float(points["point"+str(i)]["recepteur"][0])
-        V=float(points["point"+str(i)]["recepteur"][1])
+    print(points_MR)
+    for i in range (len(points_MR)) :
+        X=float(points_MR["point"+str(i)]["objet_recepteur"][0])
+        Y=float(points_MR["point"+str(i)]["objet_recepteur"][1])
+        Z=float(points_MR["point"+str(i)]["objet_recepteur"][2])
+        U=float(points_MR["point"+str(i)]["recepteur"][0])
+        V=float(points_MR["point"+str(i)]["recepteur"][1])
         B=np.concatenate((B,[[X,Y,Z,1,0,0,0,0,-U*X,-U*Y,-U*Z],[0,0,0,0,X,Y,Z,1,-V*X,-V*Y,-V*Z]]),axis=0)
         c=np.concatenate((c,np.array([[U]])))
         c=np.concatenate((c,np.array([[V]])))
@@ -37,17 +41,17 @@ def calcul_MR():
 
 
 def calcul_ME():
-    global points
+    global points_ME
     B = np.array([[0 for i in range (11)]])
     c = np.array([[0]])
     x = np.array([])
     ME = np.array([])
-    for i in range (len(points)) :
-        X=float(points["point"+str(i)]["objet"][0])
-        Y=float(points["point"+str(i)]["objet"][1])
-        Z=float(points["point"+str(i)]["objet"][2])
-        U=float(points["point"+str(i)]["emetteur"][0])
-        V=float(points["point"+str(i)]["emetteur"][1])
+    for i in range (len(points_ME)) :
+        X=float(points_ME["point"+str(i)]["objet_emetteur"][0])
+        Y=float(points_ME["point"+str(i)]["objet_emetteur"][1])
+        Z=float(points_ME["point"+str(i)]["objet_emetteur"][2])
+        U=float(points_ME["point"+str(i)]["emetteur"][0])
+        V=float(points_ME["point"+str(i)]["emetteur"][1])
         B=np.concatenate((B,[[X,Y,Z,1,0,0,0,0,-U*X,-U*Y,-U*Z],[0,0,0,0,X,Y,Z,1,-V*X,-V*Y,-V*Z]]),axis=0)
         c=np.concatenate((c,np.array([[U]])))
         c=np.concatenate((c,np.array([[V]])))
@@ -75,25 +79,34 @@ def cal_fenetre():
     fen_point_v=[]
     fen_point_f=[]
     
-    sb_emet= [tk.StringVar(value=0) for x in range(18)] 
-    sb_obj=[tk.StringVar(value=0) for x in range(27)] 
-    sb_recept=[tk.StringVar(value=0) for x in range(18)] 
+    sb_emet= [tk.StringVar(value=0) for x in range(2*nbr_points_ME)] 
+    sb_obj_r=[tk.StringVar(value=0) for x in range(3*nbr_points_MR)] 
+    sb_obj_e=[tk.StringVar(value=0) for x in range(3*nbr_points_ME)] 
+    sb_recept=[tk.StringVar(value=0) for x in range(2*nbr_points_MR)] 
     
     
     
     def load():
-        global points
-        filepath = askopenfilename(title="Ouvrir le fichier",filetypes=[("Fichiers CODEV",".codev")])
-        with open(filepath, "rb") as fp:   # Unpickling
-            points= pickle.load(fp)
-        for i in range(9):
-            sb_emet[i*2].set(points["point"+str(i)]["emetteur"][0])
-            sb_emet[i*2+1].set(points["point"+str(i)]["emetteur"][1])
-            sb_obj[i*3].set(points["point"+str(i)]["objet"][0])
-            sb_obj[i*3+1].set(points["point"+str(i)]["objet"][1])
-            sb_obj[i*3+2].set(points["point"+str(i)]["objet"][2])
-            sb_recept[i*2].set(points["point"+str(i)]["recepteur"][0])
-            sb_recept[i*2+1].set(points["point"+str(i)]["recepteur"][1])
+        global points_MR
+        global points_ME
+        # filepath = askopenfilename(title="Ouvrir le fichier",filetypes=[("Fichiers CODEV",".codev")])
+        with open('points_coord_ME.codev', "rb") as fp:   # Unpickling
+            points_ME= pickle.load(fp)
+        for i in range(nbr_points_ME):
+            sb_emet[i*2].set(points_ME["point"+str(i)]["emetteur"][0])
+            sb_emet[i*2+1].set(points_ME["point"+str(i)]["emetteur"][1])
+            sb_obj_e[i*3].set(points_ME["point"+str(i)]["objet_emetteur"][0])
+            sb_obj_e[i*3+1].set(points_ME["point"+str(i)]["objet_emetteur"][1])
+            sb_obj_e[i*3+2].set(points_ME["point"+str(i)]["objet_emetteur"][2])
+            
+        with open('points_coord_MR.codev', "rb") as fp:   # Unpickling
+            points_MR= pickle.load(fp)
+        # for i in range(nbr_points_MR):
+            # sb_emet[i*2].set(points_MR["point"+str(i)]["emetteur"][0])
+            # sb_emet[i*2+1].set(points_MR["point"+str(i)]["emetteur"][1])
+            # sb_obj_r[i*3].set(points_MR["point"+str(i)]["objet_recepteur"][0])
+            # sb_obj_r[i*3+1].set(points_MR["point"+str(i)]["objet_recepteur"][1])
+            # sb_obj_r[i*3+2].set(points_MR["point"+str(i)]["objet_recepteur"][2])
         fenetre_cal.update()
     
     def save():
@@ -139,9 +152,9 @@ def cal_fenetre():
         #objet
         fen_point_f.append(tk.Frame(fen_point_v[ligne], borderwidth=2, relief=tk.GROOVE))
        # tk.Label(fen_point_f[ligne*3+1], text="Objet").pack()
-        tk.Entry(fen_point_f[ligne*3+1],textvariable=sb_obj[ligne*3]).pack()
-        tk.Entry(fen_point_f[ligne*3+1],textvariable=sb_obj[ligne*3+1]).pack()
-        tk.Entry(fen_point_f[ligne*3+1],textvariable=sb_obj[ligne*3+2]).pack()
+        tk.Entry(fen_point_f[ligne*3+1],textvariable=sb_obj_e[ligne*3]).pack()
+        tk.Entry(fen_point_f[ligne*3+1],textvariable=sb_obj_e[ligne*3+1]).pack()
+        tk.Entry(fen_point_f[ligne*3+1],textvariable=sb_obj_e[ligne*3+2]).pack()
         fen_point_v[ligne].add(fen_point_f[ligne*3+1])
         
         #objet

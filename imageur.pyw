@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 from coord3D_objet import *
 from fringe_detector import *
-import calibration
+import calibration_gui as ca
 
 import json
 f = open('info.json')
@@ -26,7 +26,7 @@ cadre1.place(anchor="c", relx=.5, rely=.5)
 
 
 def calibrer():
-    calibration.calibration()
+    ca.main()
     
 
 def calculer():

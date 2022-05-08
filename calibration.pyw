@@ -5,9 +5,9 @@ import pickle
 import matrices
 import numpy as np
 
-root = tk.Toplevel()
+root = tk.Tk()
 root.title("Calibration")
-# root.attributes('-fullscreen', True)
+root.attributes('-fullscreen', True)
 w, h = root.winfo_screenwidth(), root.winfo_screenheight()
 
 cadre1 = tk.Frame(root)
@@ -171,7 +171,7 @@ def ME():
     entree_coord()
     
     #======= Partie droite — image =====
-    photo = Image.open("Mire_damier.png")
+    photo = Image.open("img_proj/Mire_damier.png")
     test = ImageTk.PhotoImage(photo)
 
     droite = tk.Label(p, image=test)
@@ -342,7 +342,7 @@ def MR():
     entree_coord()
     
     #======= Partie droite — image =====
-    photo = Image.open("Mire_damier.png")
+    photo = Image.open("img_proj/Mire_damier.png")
     test = ImageTk.PhotoImage(photo)
 
     droite = tk.Label(p, image=test)

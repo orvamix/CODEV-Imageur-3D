@@ -8,7 +8,7 @@ import camera_projecteur as cp
 import threading
 import time
 
-root = tk.Tk()
+root = tk.Toplevel()
 root.title("Calibration")
 root.attributes('-fullscreen', True)
 root.config(bg = "#87CEEB")

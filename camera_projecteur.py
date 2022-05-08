@@ -8,14 +8,14 @@ import time
 import sys
 from pygame.locals import *
 
-def projection(master,temps=0):
+def projection(master,temps=0,photo="img_proj/Mire_damier.png"):
     
     pygame.init()
 
 
     screen = pygame.display.set_mode((0,0), FULLSCREEN,display=0)
     w, h = pygame.display.get_surface().get_size()
-    pic = pygame.image.load("img_proj/Mire_damier.png") #You need an example picture in the same folder as this file!
+    pic = pygame.image.load("img_proj/"+photo) #You need an example picture in the same folder as this file!
     pic=pygame.transform.scale(pic, (w, h))
     screen.blit(pic,(0, 0))
     pygame.display.flip()

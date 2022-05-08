@@ -75,9 +75,9 @@ def fringe_detector(img_name,N,uRzoom,vRzoom):
                 PosiDroite[i,aD] = C+1
 
     #Enregistrement 
-    savetxt('results/PosiGauche'+img_name+'.txt', PosiGauche, fmt='%-7.0f')
-    savetxt('results/PosiDroite'+img_name+'.txt', PosiDroite, fmt='%-7.0f')
-    savetxt('results/Posiglobal'+img_name+'.txt', Posiglobal, fmt='%-7.0f')
+    savetxt('resultats/PosiGauche'+img_name+'.txt', PosiGauche, fmt='%-7.0f')
+    savetxt('resultats/PosiDroite'+img_name+'.txt', PosiDroite, fmt='%-7.0f')
+    savetxt('resultats/Posiglobal'+img_name+'.txt', Posiglobal, fmt='%-7.0f')
 
     #Inversion de contraste pour l'affichage
     InvPosiglobal=1.-Posiglobal

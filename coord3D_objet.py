@@ -17,8 +17,8 @@ uRzoom=info['uRzoom']
 vRzoom=info['vRzoom']
 
 def coord3D(u,v, v_e):
-    ME=np.loadtxt('ME.txt')
-    MR=np.loadtxt('MR.txt')
+    ME=np.loadtxt('calibration/ME.txt')
+    MR=np.loadtxt('calibration/MR.txt')
     
     coord_px=np.array([u,v,v_e])
     G=np.array([[MR[2][0]*coord_px[0], MR[2][1]*coord_px[0], MR[2][2]*coord_px[0]], [MR[2][0]*coord_px[1], MR[2][1]*coord_px[1], MR[2][2]*coord_px[1]], [ME[2][0]*coord_px[2], ME[2][1]*coord_px[2], ME[2][2]*coord_px[2]]])
@@ -29,13 +29,13 @@ def coord3D(u,v, v_e):
     M = np.matmul(G_inv, H)
     return M
 
-def coord3D_objet():
+def coord3D_objet(N=5):
     Mat_temp=[]
     Mat_fin=[]
 
     #fringe_detector("IRZoom",N,uRzoom,vRzoom)
 
-    PosD=np.loadtxt('results/PosiglobalIRZoom.txt')
+    PosD=np.loadtxt('resultats/PosiglobalIRZoom.txt')
 
 
     for i in range(1, (2**N)+1):
@@ -58,11 +58,11 @@ def coord3D_objet():
     for i in range(len(Mat_temp)):
         Mat_fin.append(coord3D(Mat_temp[i][0],Mat_temp[i][1],Mat_temp[i][2]).tolist())
         
-    with open("results/mat.txt", 'w') as output:
+    with open("resultats/mat.txt", 'w') as output:
         for row in Mat_fin:
             output.write(str(row) + '\n')
 
-    with open("results/coord", "wb") as fp:   #Pickling
+    with open("resultats/coord.codev", "wb") as fp:   #Pickling
         pickle.dump(Mat_fin, fp)
         
     return True

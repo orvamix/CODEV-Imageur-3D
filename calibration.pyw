@@ -5,9 +5,8 @@ import pickle
 import matrices
 import numpy as np
 import camera_projecteur as cp
-import time
-import asyncio
 import threading
+import time
 
 root = tk.Tk()
 root.title("Calibration")
@@ -26,6 +25,7 @@ message=tk.StringVar(value="Bienvenue dans la calibration! \n")
 def ME():
     
     global cadre1
+    global root
     global message
     
     #Divion en deux
@@ -362,14 +362,20 @@ def MR():
     
     
     def prise_photo():
+        global root
         for widget in droite.winfo_children():
             widget.destroy()
         bt_photo=tk.Button(droite, text="Prendre photo",command=prise_photo).pack(side=tk.TOP)
         
-        # cp.projection()
+        def camera():
+            cp.camera("damier_cam.jpg")
+            return
+        def projection():
+            cp.projection(root)
         
-        cp.camera("damier_cam.jpg")
-        
+        threading.Thread(target=projection).start()
+        threading.Thread(target=camera).start()
+        time.sleep(2)
         photo = Image.open("img_cam/damier_cam.jpg")
         # photo=photo.resize((w-gauche.winfo_width()-500, h))
         test = ImageTk.PhotoImage(photo)

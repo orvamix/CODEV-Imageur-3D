@@ -4,10 +4,15 @@ from PIL import Image, ImageTk
 import pickle
 import matrices
 import numpy as np
+import camera_projecteur as cp
+import time
+import asyncio
+import threading
 
 root = tk.Tk()
 root.title("Calibration")
 root.attributes('-fullscreen', True)
+root.config(bg = "#87CEEB")
 w, h = root.winfo_screenwidth(), root.winfo_screenheight()
 
 cadre1 = tk.Frame(root)
@@ -171,12 +176,14 @@ def ME():
     entree_coord()
     
     #======= Partie droite — image =====
+    droite = tk.Frame(p,width=w-gauche.winfo_width()-500, height=h-gauche.winfo_height()-100)
     photo = Image.open("img_proj/Mire_damier.png")
     test = ImageTk.PhotoImage(photo)
-
-    droite = tk.Label(p, image=test)
-    droite.image = test
     
+    
+    img = tk.Label(droite, image=test)
+    img.image = test
+    img.pack()
     
     
     #On pack tout ça
@@ -341,20 +348,50 @@ def MR():
     
     entree_coord()
     
+    largeur=100
+    hauteur=100
+    def getorigin(eventorigin):
+        global x0,y0
+        x0 = eventorigin.x
+        y0 = eventorigin.y
+        message.set(str(x0)+","+str(y0)+"\n")
+        text_box.delete(1.0,"end")
+        text_box.insert(1.0, message.get())
+        
+    droite=tk.Frame(p,width=w-gauche.winfo_width()-500, height=h-gauche.winfo_height()-100)
+    
+    
+    def prise_photo():
+        for widget in droite.winfo_children():
+            widget.destroy()
+        bt_photo=tk.Button(droite, text="Prendre photo",command=prise_photo).pack(side=tk.TOP)
+        
+        # cp.projection()
+        
+        cp.camera("damier_cam.jpg")
+        
+        photo = Image.open("img_cam/damier_cam.jpg")
+        # photo=photo.resize((w-gauche.winfo_width()-500, h))
+        test = ImageTk.PhotoImage(photo)
+        
+        img=tk.Label(droite, image=test)
+        img.image = test
+        img.pack(fill=tk.BOTH,side=tk.RIGHT, anchor=tk.NW)
+        img.place(x=largeur,y=hauteur)
+        img.bind("<Button 1>",getorigin)
+        
+        root.update()
     #======= Partie droite — image =====
-    photo = Image.open("img_proj/Mire_damier.png")
-    test = ImageTk.PhotoImage(photo)
-
-    droite = tk.Label(p, image=test)
-    droite.image = test
     
-    
-    
+    bt_photo=tk.Button(droite, text="Prendre photo",command=prise_photo).pack(side=tk.TOP)
+    # can.pack()
     #On pack tout ça
     p.add(gauche)
     p.add(droite)
     p.pack()
-
+    
+    
+    
 
 def main():
     global cadre1
@@ -376,8 +413,8 @@ def main():
     
     cadre1.pack()
     cadre1.place(anchor="c", relx=.5, rely=.5)
-    b1 = tk.Button(cadre1, text ="ME", command=gui_ME).pack()
-    b2 = tk.Button(cadre1, text ="MR", command=gui_MR).pack()
+    b1 = tk.Button(cadre1,width=40, height=4, text ="ME", command=gui_ME).pack()
+    b2 = tk.Button(cadre1,width=40, height=4, text ="MR", command=gui_MR).pack()
     
     #Menubar
     menubar = tk.Menu(root)

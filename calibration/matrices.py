@@ -27,4 +27,4 @@ def calculateur(points,nom_base_imageur,nom_base_objet):
     return M
 
 def sauve(matrice, nom):
-    savetxt(nom, matrice, fmt='%-7.0f')
+    np.savetxt(nom, matrice, fmt='%-7.0f')

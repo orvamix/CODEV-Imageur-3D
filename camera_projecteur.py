@@ -5,9 +5,10 @@ import time
 import asyncio
 import pygame
 import time
+import sys
 from pygame.locals import *
 
-def projection(master):
+def projection(master,temps=0):
     
     pygame.init()
 
@@ -18,9 +19,26 @@ def projection(master):
     pic=pygame.transform.scale(pic, (w, h))
     screen.blit(pic,(0, 0))
     pygame.display.flip()
+    # BOUCLE DE JEU
+    if(temps==0):
+        clock = pygame.time.Clock()
+        while True:
+            time = clock.tick(10)	
+            
+            # GESTION DES EVENEMENTS
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT: 
+                    pygame.quit()
+                    sys.exit(0)
+                    
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_RETURN]:
+                pygame.quit()
 
-    time.sleep(1)
-    pygame.quit()
+            pygame.display.update()
+    else:
+        pygame.time.wait(1000*temps)
+        pygame.quit()
 
 def camera(nom_cam):
     # initialize the camera

@@ -176,6 +176,15 @@ def ME():
     entree_coord()
     
     #======= Partie droite — image =====
+    
+    def getorigin(eventorigin):
+        global x0,y0
+        x0 = eventorigin.x
+        y0 = eventorigin.y
+        message.set(str(y0)+","+str(x0)+"\n")
+        text_box.delete(1.0,"end")
+        text_box.insert(1.0, message.get())
+    
     droite = tk.Frame(p,width=w-gauche.winfo_width()-500, height=h-gauche.winfo_height()-100)
     photo = Image.open("img_proj/Mire_damier.png")
     test = ImageTk.PhotoImage(photo)
@@ -183,7 +192,9 @@ def ME():
     
     img = tk.Label(droite, image=test)
     img.image = test
+    img.bind("<Button 1>",getorigin)
     img.pack()
+    
     
     
     #On pack tout ça
@@ -354,7 +365,7 @@ def MR():
         global x0,y0
         x0 = eventorigin.x
         y0 = eventorigin.y
-        message.set(str(x0)+","+str(y0)+"\n")
+        message.set(str(y0)+","+str(x0)+"\n")
         text_box.delete(1.0,"end")
         text_box.insert(1.0, message.get())
         
@@ -371,7 +382,7 @@ def MR():
             cp.camera("damier_cam.jpg")
             return
         def projection():
-            cp.projection(root)
+            cp.projection(root,1)
         
         threading.Thread(target=projection).start()
         threading.Thread(target=camera).start()
@@ -401,9 +412,13 @@ def MR():
 
 def main():
     global cadre1
+    global root
     
+    def projection_l():
+        cp.projection(root,0)
     
-    
+    def projeter():
+        threading.Thread(target=projection_l).start()
     
     def nettoyage():
         for widget in cadre1.winfo_children():
@@ -428,7 +443,13 @@ def main():
     menu1.add_command(label="Calcul de ME", command=gui_ME)
     menu1.add_command(label="Calcul de MR", command=gui_MR)
     menu1.add_command(label="Quitter", command=root.quit)
+    
+    menu2 = tk.Menu(menubar, tearoff=0)
+    menu2.add_command(label="Projeter", command=projeter)
+    
+    
     menubar.add_cascade(label="Menu", menu=menu1)
+    menubar.add_cascade(label="Projection", menu=menu2)
     root.config(menu=menubar)
     
     def fun(event):

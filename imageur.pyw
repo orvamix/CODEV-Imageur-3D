@@ -15,6 +15,47 @@ N=info['N']
 uRzoom=info['uRzoom']
 vRzoom=info['vRzoom']
 
+
+def parametres():
+    
+    global N
+    global uRzoom
+    global vRzoom
+    
+    root=tk.Toplevel()
+    root.title("Paramètres")
+    E_uRzoom=tk.StringVar(value=uRzoom)
+    E_vRzoom=tk.StringVar(value=vRzoom)
+    f1=tk.Frame(root)
+    tk.Label(f1, text="uRzoom=").pack(side=tk.LEFT)
+    tk.Entry(f1,textvariable=E_uRzoom).pack(side=tk.LEFT)
+    f1.pack(side=tk.TOP)
+    f2=tk.Frame(root)
+    tk.Label(f2, text="vRzoom=").pack(side=tk.LEFT)
+    tk.Entry(f2,textvariable=E_vRzoom).pack(side=tk.LEFT)
+    f2.pack(side=tk.TOP)
+    
+    def sauver():
+        global N
+        global uRzoom
+        global vRzoom
+        with open('info.json', 'r+') as f:
+            data = json.load(f)
+            data['uRzoom'] = int(E_uRzoom.get()) 
+            data['vRzoom'] = int(E_vRzoom.get()) 
+            f.seek(0) 
+            json.dump(data, f, indent=4)
+            f.truncate() 
+        uRzoom=int(E_uRzoom.get())
+        vRzoom=int(E_vRzoom.get()) 
+
+    
+    f3=tk.Frame(root)
+    b_save = tk.Button(root, text ="Sauver",command=sauver).pack(side=tk.LEFT)
+    b_quitter = tk.Button(root, text ="Quitter",command=root.destroy).pack(side=tk.LEFT)
+    f3.pack(side=tk.BOTTOM)
+    
+
 #Config fenetre
 fenetre = tk.Tk()
 fenetre.title("CODEV - Imageur 3D")
@@ -65,13 +106,16 @@ def afficher():
 def comparer():
     pass
 
+
 #Barre de menu
 menubar = tk.Menu(fenetre)
 
 menu1 = tk.Menu(menubar, tearoff=0)
 menu1.add_command(label="Quitter", command=fenetre.quit)
 menubar.add_cascade(label="Menu", menu=menu1)
-
+menu1 = tk.Menu(menubar, tearoff=0)
+menu1.add_command(label="Modifier", command=parametres)
+menubar.add_cascade(label="Paramètres", menu=menu1)
 
 fenetre.config(menu=menubar)
 

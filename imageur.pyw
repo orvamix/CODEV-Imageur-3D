@@ -11,7 +11,7 @@ import time
 
 f = open('info.json')
 info = json.load(f)
-N=5
+N=info['N']
 uRzoom=info['uRzoom']
 vRzoom=info['vRzoom']
 
@@ -54,7 +54,7 @@ def projeter():
     
 
 def calculer():
-    fringe_detector("IRZoom",N,1200,1300)
+    fringe_detector("IRZoom",N,uRzoom,vRzoom)
     coord3D_objet(N)
     messagebox.showinfo("Info", "Les calculs ont été effectués !")
     

@@ -382,7 +382,7 @@ def MR():
             cp.camera("damier_cam.jpg")
             return
         def projection():
-            cp.projection(root,1)
+            cp.projection(root,2)
         
         threading.Thread(target=projection).start()
         threading.Thread(target=camera).start()

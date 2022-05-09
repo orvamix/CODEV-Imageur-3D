@@ -20,7 +20,7 @@ def fringe_detector(img_name,N,uRzoom,vRzoom):
     # chargement de l'image puis binarisation 
     for k in range (0,N):
         #------ Chargement des images d'intensité IRZoom de l'objet dans le repere recepteur ---  
-        Nom = 'img_cam/'+ img_name + str(k+1) + '.bmp'
+        Nom = 'img_cam/'+ img_name + str(k) + '.jpg'
         img = io.imread(Nom)
         # Seuillage de l'image
         threshold = 125

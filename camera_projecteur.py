@@ -8,7 +8,7 @@ import time
 import sys
 from pygame.locals import *
 
-def projection(master,temps=0,photo="img_proj/Mire_damier.png"):
+def projection(master,temps=0,photo="Mire_damier.png"):
     
     pygame.init()
 

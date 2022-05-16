@@ -6,6 +6,7 @@ import asyncio
 import pygame
 import time
 import sys
+import os
 from pygame.locals import *
 
 def projection(master,temps=0,photo="Mire_damier.png"):
@@ -41,12 +42,12 @@ def projection(master,temps=0,photo="Mire_damier.png"):
         pygame.quit()
 
 def camera(nom_cam):
+    os.environ['OPENCV_VIDEOIO_PRIORITY_MSMF'] = '0'
     # initialize the camera
-    cam = cv.VideoCapture(0)   # 0 -> index of camera
+    cam = cv.VideoCapture(0, cv.CAP_DSHOW)   # 0 -> index of camera
     s, img = cam.read()
     if s:    # frame captured without any errors
 
         cv.imwrite("img_cam/"+nom_cam,img) #save image
-    cam.release
-    return
-   
+    cam.release()
+    cv.destroyAllWindows()

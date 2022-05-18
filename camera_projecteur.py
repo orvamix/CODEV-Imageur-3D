@@ -13,12 +13,12 @@ def projection(master,temps=0,photo="Mire_damier.png"):
     
     pygame.init()
     infoObject = pygame.display.Info()
-    x = 1920
+    x = 1536
     y = 0
     os.environ['SDL_VIDEO_WINDOW_POS'] = f"{x},{y}"
 
     
-    screen = pygame.display.set_mode((1920, 1080),flags=0, depth=0, display=1)
+    screen = pygame.display.set_mode((1024, 820),flags=0, depth=0, display=1)
 
     w, h = pygame.display.get_surface().get_size()
     pic = pygame.image.load("img_proj/"+photo) #You need an example picture in the same folder as this file!

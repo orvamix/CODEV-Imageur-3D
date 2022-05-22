@@ -17,8 +17,8 @@ uRzoom=info['uRzoom']
 vRzoom=info['vRzoom']
 
 def coord3D(u,v, v_e):
-    ME=np.loadtxt('calibration/ME.txt')
-    MR=np.loadtxt('calibration/MR.txt')
+    ME=np.loadtxt('ME.txt')
+    MR=np.loadtxt('MR.txt')
     
     coord_px=np.array([u,v,v_e])
     G=np.array([[MR[2][0]*coord_px[0], MR[2][1]*coord_px[0], MR[2][2]*coord_px[0]], [MR[2][0]*coord_px[1], MR[2][1]*coord_px[1], MR[2][2]*coord_px[1]], [ME[2][0]*coord_px[2], ME[2][1]*coord_px[2], ME[2][2]*coord_px[2]]])

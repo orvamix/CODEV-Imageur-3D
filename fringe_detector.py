@@ -6,6 +6,32 @@ from skimage.morphology import disk
 # On importe le module numpy qui permet de faire du calcul numérique
 import numpy as np
 from numpy import loadtxt, zeros, ones, savetxt, empty
+import cv2
+import matplotlib.pyplot as plt
+
+def filtre(nom_img):
+
+    img = cv2.imread(nom_img)
+
+    # creating mask using thresholding over `red` channel (use better use histogram to get threshoding value)
+    # I have used 200 as thershoding value it can be different for different images
+    ret, mask = cv2.threshold(img[:, :,2], 150, 255, cv2.THRESH_BINARY)
+
+    mask3 = np.zeros_like(img)
+    mask3[:, :, 0] = mask
+    mask3[:, :, 1] = mask
+    mask3[:, :, 2] = mask
+
+    # extracting `orange` region using `biteise_and`
+    orange = cv2.bitwise_and(img, mask3)
+
+    orange = cv2.medianBlur(orange,5)
+    orange  = cv2.bilateralFilter(orange,50,150,75)
+
+    
+    return orange
+
+
 
 """
 return numpy matrix
@@ -21,9 +47,10 @@ def fringe_detector(img_name,N,uRzoom,vRzoom):
     for k in range (0,N):
         #------ Chargement des images d'intensité IRZoom de l'objet dans le repere recepteur ---  
         Nom = 'img_cam/'+ img_name + str(k) + '.jpg'
-        img = io.imread(Nom)
+        # img = io.imread(Nom)
+        img=filtre(Nom)
         # Seuillage de l'image
-        threshold = 125
+        threshold = 0
         idx = img[:,:,0] > threshold
         img[idx,0] = 255
         IRz = (img/255)
@@ -92,6 +119,7 @@ def fringe_detector(img_name,N,uRzoom,vRzoom):
     B[:,:,2] = couleur_cotes[2]*InvPosiglobal
     B=B.astype(np.uint8)
     io.imsave(A,B)
+    
     
     return B
     

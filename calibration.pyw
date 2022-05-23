@@ -146,7 +146,7 @@ def ME():
     
     def calculer():
         M=matrices.calculateur(ME_points,"emetteur","objet")
-        matrices.sauve(M,"ME")
+        np.savetxt("ME.txt", M)
         message.set(str(M)+"\n")
         text_box.delete(1.0,"end")
         text_box.insert(1.0, message.get())
@@ -330,7 +330,7 @@ def MR():
     
     def calculer():
         M=matrices.calculateur(MR_points,"recepteur","objet")
-        matrices.sauve(M,"MR")
+        np.savetxt("MR.txt", M)
         message.set(str(M)+"\n")
         text_box.delete(1.0,"end")
         text_box.insert(1.0, message.get())

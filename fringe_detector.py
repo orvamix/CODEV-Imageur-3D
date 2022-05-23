@@ -8,28 +8,32 @@ import numpy as np
 from numpy import loadtxt, zeros, ones, savetxt, empty
 import cv2
 import matplotlib.pyplot as plt
+from PIL import Image
 
 def filtre(nom_img):
-
-    img = cv2.imread(nom_img)
-
-    # creating mask using thresholding over `red` channel (use better use histogram to get threshoding value)
-    # I have used 200 as thershoding value it can be different for different images
-    ret, mask = cv2.threshold(img[:, :,2], 150, 255, cv2.THRESH_BINARY)
-
-    mask3 = np.zeros_like(img)
-    mask3[:, :, 0] = mask
-    mask3[:, :, 1] = mask
-    mask3[:, :, 2] = mask
-
-    # extracting `orange` region using `biteise_and`
-    orange = cv2.bitwise_and(img, mask3)
-
-    orange = cv2.medianBlur(orange,5)
-    orange  = cv2.bilateralFilter(orange,50,150,75)
-
     
-    return orange
+    img = cv2.imread(nom_img)
+    hh, ww = img.shape[:2]
+
+    # threshold on white
+    # Define lower and uppper limits
+    lower = np.array([0, 0, 0])
+    upper = np.array([150, 170, 170])
+
+    # Create mask to only select black
+    thresh = cv2.inRange(img, lower, upper)
+
+    # apply morphology
+    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2,2))
+    morph = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, kernel)
+
+    # invert morp image
+    mask = 255 - morph
+
+    mask  = cv2.bilateralFilter(mask,9,70,150)
+    mask = cv2.medianBlur(mask,3)
+    
+    return cv2.bitwise_and(img, img, mask=mask)
 
 
 
@@ -46,15 +50,18 @@ def fringe_detector(img_name,N,uRzoom,vRzoom):
     # chargement de l'image puis binarisation 
     for k in range (0,N):
         #------ Chargement des images d'intensité IRZoom de l'objet dans le repere recepteur ---  
-        Nom = 'img_cam/'+ img_name + str(k) + '.jpg'
+        Nom = 'img_cam/'+ img_name + str(k)+ '.jpg'
         # img = io.imread(Nom)
         img=filtre(Nom)
         # Seuillage de l'image
         threshold = 0
         idx = img[:,:,0] > threshold
         img[idx,0] = 255
+        
+        
         IRz = (img/255)
-            # On enregistre les IRzoom_1 2 3 ... dans IR_zoom
+        
+        # On enregistre les IRzoom_1 2 3 ... dans IR_zoom
         #IRz[:,:,0] = filters.median(IRz[:,:,0], disk(5))
         IRzoom[:,:,k] = IRz[:,:,0]
 

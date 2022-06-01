@@ -7,6 +7,7 @@ import numpy as np
 import camera_projecteur as cp
 import threading
 import time
+import testpourME as tME
 
 root = tk.Tk()
 root.title("Calibration")
@@ -145,7 +146,7 @@ def ME():
         entree_coord()
     
     def calculer():
-        M=matrices.calculateur(ME_points,"emetteur","objet")
+        M=tME.calculateur(ME_points,"emetteur","objet")
         np.savetxt("ME.txt", M)
         message.set(str(M)+"\n")
         text_box.delete(1.0,"end")

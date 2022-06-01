@@ -64,20 +64,6 @@ def coord3D_objet(N=5):
 
     with open("resultats/coord.codev", "wb") as fp:   #Pickling
         pickle.dump(Mat_fin, fp)
-    
-    x =[item[0] for item in Mat_fin]
-    y =[item[1] for item in Mat_fin]
-    z =[item[2] for item in Mat_fin]
-    
-    with open("EX.txt", 'w') as output:
-        for row in x:
-            output.write(str(row[0]) + ' ')
-    with open("EY.txt", 'w') as output:
-        for row in y:
-            output.write(str(row[0]) + ' ')
-    with open("EZ.txt", 'w') as output:
-        for row in z:
-            output.write(str(row[0]) + ' ')
         
     return True
 

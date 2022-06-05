@@ -71,14 +71,3 @@ y =[item[1][0] for item in Mat_fin]
 
 plt.plot(x, y)
 
-#Test premier point dans le poly u_r, v_r = (249, 490)
-#On a
-#Du coup pour chaque point de la calibration on récupère les ur, vr, et Zj
-#Puis on a automatiquement les X,Y,Z
-
-u_1, v_1 = (249, 490)
-
-    
-print(coord2D(u_1, v_1))
-
-

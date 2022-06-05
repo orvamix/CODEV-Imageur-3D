@@ -7,6 +7,7 @@ import numpy as np
 import camera_projecteur as cp
 import threading
 import time
+import jsptesttt as cd2
 
 root = tk.Tk()
 root.title("Calibration")
@@ -19,13 +20,13 @@ cadre1 = tk.Frame(root)
 ME_position=0
 ME_points_objet=[tk.StringVar(value=0) for x in range(3)] 
 ME_points_emetteur=[tk.StringVar(value=0) for x in range(2)]
+ME_points_recepteur=[tk.StringVar(value=0) for x in range(2)]
 ME_points={}
 message=tk.StringVar(value="Bienvenue dans la calibration! \n")
 
 def ME():
     
     global cadre1
-    global root
     global message
     
     #Divion en deux
@@ -44,24 +45,36 @@ def ME():
     def entree_coord():
         global ME_position
         global ME_points_objet
-        global ME_points_emetteur
+        global ME_points_recepteur
         for widget in f_coord.winfo_children():
             widget.destroy()
 
         l = tk.LabelFrame(f_coord, text="Point "+str(int(ME_position+1)))
+        
+        l0=tk.Frame(l)
+        tk.Label(l0, text="Émetteur").pack()
+        tk.Entry(l0,textvariable=ME_points_emetteur[int(ME_position)*2]).pack()
+        tk.Entry(l0,textvariable=ME_points_emetteur[int(ME_position)*2+1]).pack()
+        
         l1=tk.Frame(l)
-        tk.Label(l1, text="Émetteur").pack()
-        tk.Entry(l1,textvariable=ME_points_emetteur[int(ME_position)*2]).pack()
-        tk.Entry(l1,textvariable=ME_points_emetteur[int(ME_position)*2+1]).pack()
+        tk.Label(l1, text="Récepteur").pack()
+        tk.Entry(l1,textvariable=ME_points_recepteur[int(ME_position)*2]).pack()
+        tk.Entry(l1,textvariable=ME_points_recepteur[int(ME_position)*2+1]).pack()
         
         l2=tk.Frame(l)
         tk.Label(l2, text="Objet").pack()
-        tk.Entry(l2,textvariable=ME_points_objet[int(ME_position)*3]).pack()
-        tk.Entry(l2,textvariable=ME_points_objet[int(ME_position)*3+1]).pack()
+        if (ME_points_objet[int(ME_position)*3].get()!="0" or ME_points_objet[int(ME_position)*3+1].get()!="0"):
+            tk.Label(l2,text=ME_points_objet[int(ME_position)*3].get()).pack()
+            tk.Label(l2,text=ME_points_objet[int(ME_position)*3+1].get()).pack()
+        else:
+            tk.Label(l2,text="?").pack()
+            tk.Label(l2,text="?").pack()
         tk.Entry(l2,textvariable=ME_points_objet[int(ME_position)*3+2]).pack()
         
-        l1.pack(side=tk.LEFT)
-        l2.pack(side=tk.RIGHT)
+        
+        l0.pack(side=tk.LEFT)
+        l2.pack(side=tk.LEFT)
+        l1.pack(side=tk.RIGHT)
         l.pack(side=tk.TOP)
         f_coord.pack()
         root.update()
@@ -76,28 +89,30 @@ def ME():
         entree_coord()
     def entree_coord_d():
         global ME_position
-        if(ME_position<len(ME_points_emetteur)/2-1):
+        if(ME_position<len(ME_points_recepteur)/2-1):
             ME_position=ME_position+1
         else:
-            ME_position=len(ME_points_emetteur)/2-1
+            ME_position=len(ME_points_recepteur)/2-1
         entree_coord()
     def nouveau():
         global ME_points_objet
+        global ME_points_recepteur
         global ME_points_emetteur
         global ME_position
         ME_points_objet=ME_points_objet+[tk.StringVar(value=0) for x in range(3)]
+        ME_points_recepteur=ME_points_recepteur+[tk.StringVar(value=0) for x in range(2)]
         ME_points_emetteur=ME_points_emetteur+[tk.StringVar(value=0) for x in range(2)]
-        ME_position=len(ME_points_emetteur)/2-1
+        ME_position=len(ME_points_recepteur)/2-1
         entree_coord()
     def supprimer():
         global ME_points_objet
-        global ME_points_emetteur
+        global ME_points_recepteur
         global ME_position
         if(ME_position==0):
             return
         else:
             del ME_points_objet[(int(ME_position)*2-1):(int(ME_position*2))]
-            del ME_points_emetteur[(int(ME_position)*3-1):(int(ME_position*3)+1)]
+            del ME_points_recepteur[(int(ME_position)*3-1):(int(ME_position*3)+1)]
         ME_position=ME_position-1
         entree_coord()
 
@@ -105,10 +120,11 @@ def ME():
         global message
         global ME_points
         global ME_points_objet
-        global ME_points_emetteur
+        global ME_points_recepteur
         filepath=asksaveasfilename(title="Enregistrer le fichier",initialfile="ME_points",defaultextension="codev",filetypes=[("Fichiers CODEV",".codev")])
-        for i in range(int(len(ME_points_emetteur)/2)):
+        for i in range(int(len(ME_points_recepteur)/2)):
             thisdict = {
+              "recepteur": [ME_points_recepteur[i*2].get(),ME_points_recepteur[i*2+1].get()],
               "emetteur": [ME_points_emetteur[i*2].get(),ME_points_emetteur[i*2+1].get()],
               "objet": [ME_points_objet[i*3].get(),ME_points_objet[i*3+1].get(),ME_points_objet[i*3+2].get()],
             }
@@ -124,6 +140,7 @@ def ME():
     def charger():
         global ME_points
         global ME_points_objet
+        global ME_points_recepteur
         global ME_points_emetteur
         global message
         filepath = askopenfilename(title="Ouvrir le fichier",filetypes=[("Fichiers CODEV",".codev")])
@@ -131,8 +148,11 @@ def ME():
             ME_points= pickle.load(fp)
         
         ME_points_objet=ME_points_objet+[tk.StringVar(value=0) for x in range(3)]*(len(ME_points)-1)
+        ME_points_recepteur=ME_points_recepteur+[tk.StringVar(value=0) for x in range(2)]*(len(ME_points)-1)
         ME_points_emetteur=ME_points_emetteur+[tk.StringVar(value=0) for x in range(2)]*(len(ME_points)-1)
         for i in range(len(ME_points)):
+            ME_points_recepteur[i*2].set(ME_points["point"+str(i)]["recepteur"][0])
+            ME_points_recepteur[i*2+1].set(ME_points["point"+str(i)]["recepteur"][1])
             ME_points_emetteur[i*2].set(ME_points["point"+str(i)]["emetteur"][0])
             ME_points_emetteur[i*2+1].set(ME_points["point"+str(i)]["emetteur"][1])
             ME_points_objet[i*3].set(ME_points["point"+str(i)]["objet"][0])
@@ -145,15 +165,26 @@ def ME():
         entree_coord()
     
     def calculer():
-        M=matrices.calculateur(ME_points,"emetteur","objet")
+        M=matrices.calculateur(ME_points,"recepteur","objet")
         np.savetxt("ME.txt", M)
         message.set(str(M)+"\n")
         text_box.delete(1.0,"end")
         text_box.insert(1.0, message.get())
     
+    def calculerXY():
+        global ME_points
+        global ME_points_objet
+        global ME_points_recepteur
+        global ME_points_emetteur
+        u,v=cd2.coord2D(int(ME_points_recepteur[int(ME_position)*2].get()),int(ME_points_recepteur[int(ME_position)*2+1].get()))
+        ME_points_objet[int(ME_position)*3+1].set(v[0])
+        ME_points_objet[int(ME_position)*3].set(u[0])
+        entree_coord()
+    
     #Boutons
     g_lst_bt3=tk.Frame(gauche)
-    b_charger = tk.Button(g_lst_bt3, text ="calculer ME",command=calculer).pack(side=tk.LEFT)
+    b_calculer = tk.Button(g_lst_bt3, text ="calculer ME",command=calculer).pack(side=tk.LEFT)
+    b_objet = tk.Button(g_lst_bt3, text ="Calculer X,Y",command=calculerXY).pack(side=tk.LEFT)
     g_lst_bt3.pack()
     
     g_lst_bt2=tk.Frame(gauche)
@@ -175,30 +206,89 @@ def ME():
     
     entree_coord()
     
-    #======= Partie droite — image =====
+    largeur=100
+    hauteur=100
     
-    def getorigin(eventorigin):
+    photo = Image.open("img_cam/damier_cam.jpg")
+    wr1,hr1=photo.size
+    photo = photo.resize((int(wr1/1.5),int(hr1/1.5)))
+    photo2 = Image.open("img_proj/Mire_damier.png")
+    wr2,hr2=photo2.size
+    photo2 = photo2.resize((int(wr2/1.5),int(hr2/1.5)))
+    
+    def getorigin1(eventorigin):
         global x0,y0
         x0 = eventorigin.x
         y0 = eventorigin.y
-        message.set(str(y0)+","+str(x0)+"\n")
+        message.set(str(int(y0*1.5))+","+str(int(x0*1.5))+"\n")
         text_box.delete(1.0,"end")
         text_box.insert(1.0, message.get())
     
-    droite = tk.Frame(p,width=w-gauche.winfo_width()-500, height=h-gauche.winfo_height()-100)
-    photo = Image.open("img_proj/Mire_damier.png")
-    test = ImageTk.PhotoImage(photo)
+    def getorigin2(eventorigin):
+        global x0,y0
+        x0 = eventorigin.x
+        y0 = eventorigin.y
+        message.set(str(int(y0*1.5))+","+str(int(x0*1.5))+"\n")
+        text_box.delete(1.0,"end")
+        text_box.insert(1.0, message.get())    
+        
+    droite = tk.PanedWindow(p, orient=tk.VERTICAL)
     
     
-    img = tk.Label(droite, image=test)
-    img.image = test
-    img.bind("<Button 1>",getorigin)
-    img.pack()
+    droite_cam=tk.Frame(droite,width=w-gauche.winfo_width()-500,height=int(h/2-gauche.winfo_width()-50))
+    droite_dam=tk.Frame(droite,width=w-gauche.winfo_width()-500,height=int(h/2-gauche.winfo_width()-50))
     
     
+    def prise_photo():
+        global root
+        for widget in droite_cam.winfo_children():
+            widget.destroy()
+        for widget in droite_dam.winfo_children():
+            widget.destroy()
+        bt_photo=tk.Button(droite_cam, text="Prendre photo",command=prise_photo).pack(side=tk.TOP)
+        
+        def camera():
+            cp.camera("damier_cam.jpg")
+            return
+        def projection():
+            cp.projection(root,2)
+        
+        threading.Thread(target=projection).start()
+        threading.Thread(target=camera).start()
+        time.sleep(2)
+        
+        
+        
+        
+        test = ImageTk.PhotoImage(photo)      
+        img=tk.Label(droite_cam, image=test)
+        img.image = test
+        img.bind("<Button 1>",getorigin1)
+        img.pack()
+        # img.place(x=largeur,y=hauteur)
+        
+        
+        
+        test2 = ImageTk.PhotoImage(photo2)  
+        img2 = tk.Label(droite_dam, image=test2)
+        img2.image = test2
+        img2.bind("<Button 1>",getorigin2)
+        img2.pack()
+        # img2.place(x=largeur,y=hauteur)
+        
+        root.update()
+    #======= Partie droite — image =====
     
+    
+    bt_photo=tk.Button(droite_cam, text="Prendre photo",command=prise_photo).pack(side=tk.TOP)
+    
+    
+
     #On pack tout ça
     p.add(gauche)
+    droite.add(droite_cam,stretch="always")
+    droite.add(droite_dam,stretch="always")
+    droite.pack(expand=True, fill="both")
     p.add(droite)
     p.pack()
     
@@ -231,8 +321,12 @@ def MR():
         global MR_points_recepteur
         for widget in f_coord.winfo_children():
             widget.destroy()
-
+        
+        for i in range(len(MR_points_recepteur)):
+            print(MR_points_recepteur[i].get())
+        
         l = tk.LabelFrame(f_coord, text="Point "+str(int(MR_position+1)))
+        
         l1=tk.Frame(l)
         tk.Label(l1, text="Récepteur").pack()
         tk.Entry(l1,textvariable=MR_points_recepteur[int(MR_position)*2]).pack()
@@ -243,6 +337,7 @@ def MR():
         tk.Entry(l2,textvariable=MR_points_objet[int(MR_position)*3]).pack()
         tk.Entry(l2,textvariable=MR_points_objet[int(MR_position)*3+1]).pack()
         tk.Entry(l2,textvariable=MR_points_objet[int(MR_position)*3+2]).pack()
+        
         
         l2.pack(side=tk.LEFT)
         l1.pack(side=tk.RIGHT)
@@ -322,7 +417,8 @@ def MR():
             MR_points_objet[i*3].set(MR_points["point"+str(i)]["objet"][0])
             MR_points_objet[i*3+1].set(MR_points["point"+str(i)]["objet"][1])
             MR_points_objet[i*3+2].set(MR_points["point"+str(i)]["objet"][2])
-            
+        
+        
         message.set(message.get()+str(len(MR_points))+" points chargés\n")
         text_box.delete(1.0,"end")
         text_box.insert(1.0, message.get())
@@ -335,9 +431,10 @@ def MR():
         text_box.delete(1.0,"end")
         text_box.insert(1.0, message.get())
     
+    
     #Boutons
     g_lst_bt3=tk.Frame(gauche)
-    b_charger = tk.Button(g_lst_bt3, text ="calculer MR",command=calculer).pack(side=tk.LEFT)
+    b_calculer = tk.Button(g_lst_bt3, text ="calculer MR",command=calculer).pack(side=tk.LEFT)
     g_lst_bt3.pack()
     
     g_lst_bt2=tk.Frame(gauche)
@@ -361,6 +458,9 @@ def MR():
     
     largeur=100
     hauteur=100
+    
+    
+   
     def getorigin(eventorigin):
         global x0,y0
         x0 = eventorigin.x
@@ -368,8 +468,11 @@ def MR():
         message.set(str(y0)+","+str(x0)+"\n")
         text_box.delete(1.0,"end")
         text_box.insert(1.0, message.get())
-        
-    droite=tk.Frame(p,width=w-gauche.winfo_width()-500, height=h-gauche.winfo_height()-100)
+    
+
+    
+    
+    droite=tk.Frame(p,width=w-gauche.winfo_width()-500,height=h-gauche.winfo_width()-50)
     
     
     def prise_photo():
@@ -387,21 +490,26 @@ def MR():
         threading.Thread(target=projection).start()
         threading.Thread(target=camera).start()
         time.sleep(2)
-        photo = Image.open("img_cam/damier_cam.jpg")
-        # photo=photo.resize((w-gauche.winfo_width()-500, h))
-        test = ImageTk.PhotoImage(photo)
         
+        
+        
+        photo = Image.open("img_cam/damier_cam.jpg")
+        test = ImageTk.PhotoImage(photo)      
         img=tk.Label(droite, image=test)
         img.image = test
-        img.pack(fill=tk.BOTH,side=tk.RIGHT, anchor=tk.NW)
-        img.place(x=largeur,y=hauteur)
         img.bind("<Button 1>",getorigin)
+        img.pack()
+        # img.place(x=largeur,y=hauteur)
+
         
         root.update()
     #======= Partie droite — image =====
     
+    
     bt_photo=tk.Button(droite, text="Prendre photo",command=prise_photo).pack(side=tk.TOP)
-    # can.pack()
+    
+    
+
     #On pack tout ça
     p.add(gauche)
     p.add(droite)

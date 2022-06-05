@@ -20,7 +20,6 @@ def calculateur(points,nom_base_imageur,nom_base_objet):
         c=np.concatenate((c,np.array([[V]])))
     B=B[1:]
     c=c[1:]
-    
     x = np.dot(np.dot(inv(np.dot(np.transpose(B),B)),np.transpose(B)),c)
     x = np.concatenate((x,[[1]]))
     M = [[x[i][0] for i in range(4)],[x[i+4][0] for i in range(4)],[x[i+8][0] for i in range(4)]]

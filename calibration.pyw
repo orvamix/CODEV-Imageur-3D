@@ -176,7 +176,7 @@ def ME():
         global ME_points_objet
         global ME_points_recepteur
         global ME_points_emetteur
-        u,v=cd2.coord2D(int(ME_points_recepteur[int(ME_position)*2].get()),int(ME_points_recepteur[int(ME_position)*2+1].get()))
+        u,v=cd2.coord2D(int(ME_points_recepteur[int(ME_position)*2].get()),int(ME_points_recepteur[int(ME_position)*2+1].get()),int(ME_points_objet[int(ME_position)*3+2].get()))
         ME_points_objet[int(ME_position)*3+1].set(v[0])
         ME_points_objet[int(ME_position)*3].set(u[0])
         entree_coord()

@@ -24,10 +24,9 @@ def fct_MRN(MR):
     a = MR[2][3]
     return MR/a
 
-def coord2D(u,v):
+def coord2D(u,v,Z):
     MR=np.loadtxt('MR.txt')
     MRN = fct_MRN(MR)
-    Z = 0
     
     coord_px=np.array([u,v])
     V = np.array([[MRN[2][0]*coord_px[0] - MRN[0][0], MRN[2][1]*coord_px[0] - MRN[0][1]], [MRN[2][0]*coord_px[1] - MRN[1][0], MRN[2][1]*coord_px[1] - MRN[1][1]]])
@@ -38,36 +37,36 @@ def coord2D(u,v):
     return N
 
 
-Mat_temp=[]
-Mat_fin=[]
+#Mat_temp=[]
+#Mat_fin=[]
 
 #fringe_detector("IRZoom",N,uRzoom,vRzoom)
 
-PosD=np.loadtxt('resultats/PosiglobalIRZoom.txt')
+#PosD=np.loadtxt('resultats/PosiglobalIRZoom.txt')
 
 
-for i in range(1, (2**N)+1):
-    if i%2 == 0:
-        for j in range(len(PosD)):
-            for k in range(len(PosD[j])):
-                if PosD[j][k]==i:
-                    Mat_temp.append([j+1,k+1])
-                    
-    else :
-        for j in range(len(PosD)):
-            for k in range(len(PosD[j])):
-                if PosD[j][k]==i:
-                    Mat_temp.append([j+1,k+1])
-                    
-                    
-        
-
-for i in range(len(Mat_temp)):
-    Mat_fin.append(coord2D(Mat_temp[i][0],Mat_temp[i][1]).tolist())
-
-
-x =[item[0][0] for item in Mat_fin]
-y =[item[1][0] for item in Mat_fin]
-
-plt.plot(x, y)
+#for i in range(1, (2**N)+1):
+#    if i%2 == 0:
+#        for j in range(len(PosD)):
+#            for k in range(len(PosD[j])):
+#                if PosD[j][k]==i:
+#                    Mat_temp.append([j+1,k+1])
+#                    
+#    else :
+#        for j in range(len(PosD)):
+#            for k in range(len(PosD[j])):
+#                if PosD[j][k]==i:
+#                    Mat_temp.append([j+1,k+1])
+#                    
+#                    
+#        
+#
+#for i in range(len(Mat_temp)):
+#    Mat_fin.append(coord2D(Mat_temp[i][0],Mat_temp[i][1]).tolist())
+#
+#
+#x =[item[0][0] for item in Mat_fin]
+#y =[item[1][0] for item in Mat_fin]
+#
+#plt.plot(x, y)
 

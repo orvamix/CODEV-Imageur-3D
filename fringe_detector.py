@@ -53,6 +53,7 @@ def fringe_detector(img_name,N,uRzoom,vRzoom):
         Nom = 'img_cam/'+ img_name + str(k)+ '.jpg'
         # img = io.imread(Nom)
         img=filtre(Nom)
+        img = cv2.resize(img, (vRzoom,uRzoom))
         # Seuillage de l'image
         threshold = 0
         idx = img[:,:,0] > threshold

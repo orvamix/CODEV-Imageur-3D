@@ -75,10 +75,22 @@ def affichage():
 
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
-
+    
     x =[item[0] for item in Mat_fin]
     y =[item[1] for item in Mat_fin]
     z =[item[2] for item in Mat_fin]
+    
+    # x =[item[0] for item in Mat_fin if item[0][0] < 700 and item[0][0] >-400]
+    # y =[item[1] for item in Mat_fin if item[0][0] < 700 and item[0][0] >-400]
+    # z =[item[2] for item in Mat_fin if item[0][0] < 700 and item[0][0] >-400]
+    
+    # x =[item[0] for item in Mat_fin if item[1][0] < 400 and item[1][0] >-400]
+    # y =[item[1] for item in Mat_fin if item[1][0] < 400 and item[1][0] >-400]
+    # z =[item[2] for item in Mat_fin if item[1][0] < 400 and item[1][0] >-400]
+    
+    # x =[item[0] for item in Mat_fin if item[2][0] < 0 and item[2][0] >-500]
+    # y =[item[1] for item in Mat_fin if item[2][0] < 0 and item[2][0] >-500]
+    # z =[item[2] for item in Mat_fin if item[2][0] < 0 and item[2][0] >-500]
 
 
 

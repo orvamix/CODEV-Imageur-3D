@@ -111,8 +111,9 @@ def ME():
         if(ME_position==0):
             return
         else:
-            del ME_points_objet[(int(ME_position)*2-1):(int(ME_position*2))]
-            del ME_points_recepteur[(int(ME_position)*3-1):(int(ME_position*3)+1)]
+            del ME_points_recepteur[(int(ME_position)*2-1):(int(ME_position*2))]
+            del ME_points_emetteur[(int(ME_position)*2-1):(int(ME_position*2))]
+            del ME_points_objet[(int(ME_position)*3-1):(int(ME_position*3)+1)]
         ME_position=ME_position-1
         entree_coord()
 
@@ -165,7 +166,7 @@ def ME():
         entree_coord()
     
     def calculer():
-        M=matrices.calculateur(ME_points,"recepteur","objet")
+        M=matrices.calculateur(ME_points,"emetteur","objet")
         np.savetxt("ME.txt", M)
         message.set(str(M)+"\n")
         text_box.delete(1.0,"end")
@@ -247,20 +248,23 @@ def ME():
             widget.destroy()
         bt_photo=tk.Button(droite_cam, text="Prendre photo",command=prise_photo).pack(side=tk.TOP)
         
+        filepath = photo
+        
+        
         def camera():
-            cp.camera("damier_cam.jpg")
-            return
+            filepath=askopenfilename(title="Ouvrir le fichier")
         def projection():
             cp.projection(root,2)
         
-        threading.Thread(target=projection).start()
-        threading.Thread(target=camera).start()
-        time.sleep(2)
+       
+        # threading.Thread(target=projection).start()
+        # threading.Thread(target=camera).start()
+        # time.sleep(2)
+        camera()
         
         
         
-        
-        test = ImageTk.PhotoImage(photo)      
+        test = ImageTk.PhotoImage(filepath)      
         img=tk.Label(droite_cam, image=test)
         img.image = test
         img.bind("<Button 1>",getorigin1)
@@ -487,7 +491,7 @@ def MR():
         def projection():
             cp.projection(root,2)
         
-        threading.Thread(target=projection).start()
+        # threading.Thread(target=projection).start()
         threading.Thread(target=camera).start()
         time.sleep(2)
         

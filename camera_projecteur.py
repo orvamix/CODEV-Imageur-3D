@@ -51,8 +51,8 @@ def camera(nom_cam):
     # initialize the camera
     cam = cv.VideoCapture(0, cv.CAP_DSHOW)   # 0 -> index of camera
     
-    cam.set(cv.CAP_PROP_FRAME_WIDTH, 1600)  # set new dimensionns to cam object (not cap)
-    cam.set(cv.CAP_PROP_FRAME_HEIGHT, 904)
+    # cam.set(cv.CAP_PROP_FRAME_WIDTH, 1600) 
+    # cam.set(cv.CAP_PROP_FRAME_HEIGHT, 904)
     s, img = cam.read()
     if s:    # frame captured without any errors
 
